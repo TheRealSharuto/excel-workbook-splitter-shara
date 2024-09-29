@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Apps</title>
+</head>
+<body>
+    <h2>Excel Splitter</h2>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <label>Select Excel file:</label><br>
+        <input type="file" name="file" accept=".xlsx, .xls"><br><br>
+
+        <label>Rows per Sheet:</label><br>
+        <input type="number" name="rows" min="1"><br><br>
+
+        <label>Sheet Name:</label><br>
+        <input type="text" name="sheet_name"><br><br>
+
+        <input type="submit" value="Split">
+    </form>
+</body>
+</html>

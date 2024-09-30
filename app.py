@@ -41,5 +41,40 @@ def home():
     
     return render_template("index.html")
 
+@app.route('/excel-data-extractor', methods=["GET", "POST"])
+def extractor():
+    if request.method == "POST":
+
+        # Ensure output directory exists
+        os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+        ex_excel_file = request.files["file"]
+        if not ex_excel_file.filename.endswith('.xlsx'):
+            return "Invalid file type", 400
+        col_name = request.form["col_name"]
+        col_value = request.form["col_value"]
+        workbook_name = request.form["ext_workbook_name"]
+
+        # Save the uploaded file
+        file_path = os.path.join(UPLOAD_FOLDER, secure_filename(ex_excel_file.filename))
+        ex_excel_file.save(file_path)
+
+        # Extract from excel sheet
+        df = pd.read_excel(file_path)
+        if col_value:
+            # Filter rows where the column matches the given value
+            extracted_df = df[df[col_name] == col_value]
+        else:
+            # Filter rows where the column is blank
+            extracted_df = df[df[col_name].isna()]
+        
+        # Save the extracted data to a new Excel File
+        extracted_file_path = os.path.join(OUTPUT_FOLDER, f"{workbook_name}.xlsx")
+        extracted_df.to_excel(extracted_file_path, index=False, header=True, engine='openpyxl')
+
+        return send_file(extracted_file_path, as_attachment=True)
+    
+    return render_template('excel-data-extractor.html')
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

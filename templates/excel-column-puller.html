@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <!-- Additional head content specific to this page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container m-5">
+    <h2>Column Puller</h2>
+    <ol class="mt-2 mb-2">
+        <li>Choose your excel file(s)</li>
+        <li>Enter the name of the column you are pulling</li>
+        <li>Enter the name of the new workbook you are generating</li>
+        <li>Click pull, the file(s) will be downloaded to Downloads (or wherever your default downloads location is)</li>
+    </ol>
+    <p class="mt-2"><b>Note: </b>If you are extracting by a column with no value, leave <i>Enter column value:</i> blank.</p>
+    <form action="/excel-column-puller" method="POST" enctype="multipart/form-data">
+        <label class="form-label">Select Excel file(s):</label><br>
+        <input class="form-control" type="file" name="files" accept=".xlsx, .xls" multiple required><br><br>
+
+        <label class="form-label">Enter column name: <span style="color: red">*</span></label><br>
+        <input class="form-control" type="text" name="col_name" required><br><br>
+
+        <label class="form-label">Enter NEW column name (optional): </label><br>
+        <input class="form-control" type="text" name="new_col_name"><br><br>
+
+        <input class="form-control submit-form" type="submit" value="Extract">
+    </form>
+</div>
+{% endblock %}

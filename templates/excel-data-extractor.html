@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}
+    <!-- Additional head content specific to this page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container m-5">
+    <h2>Excel Data Extractor</h2>
+    <ol class="mt-2 mb-2">
+        <li>Choose your excel file</li>
+        <li>Enter the column name of the value you will be filtering by</li>
+        <li>Enter the value</li>
+        <li>Enter the name of the new workbook you are generating</li>
+        <li>Click extract, the file will be downloaded to Downloads (or wherever your default downloads location is)</li>
+    </ol>
+    <p class="mt-2"><b>Note: </b>If you are extracting by a column with no value, leave <i>Enter column value:</i> blank.</p>
+    <form action="/excel-data-extractor" method="POST" enctype="multipart/form-data">
+        <label class="form-label">Select Excel file:</label><br>
+        <input class="form-control" type="file" name="file" accept=".xlsx, .xls"><br><br>
+
+        <label class="form-label">Enter column name:</label><br>
+        <input type="text" name="col_name"><br><br>
+
+        <label class="form-label">Enter column value:</label><br>
+        <input class="form-control" type="text" name="col_value"><br><br>
+
+        <label>Enter extracted workbook name:</label><br>
+        <input class="form-control" type="text" name="ext_workbook_name"><br><br>
+
+        <input class="form-control submit-form" type="submit" value="Extract">
+    </form>
+</div>
+{% endblock %}

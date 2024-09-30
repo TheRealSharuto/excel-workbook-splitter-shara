@@ -1,23 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automation Apps</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block head %}   
+{% endblock %}
+
+{% block content %}
+<div class="container m-5">
     <h2>Excel Splitter</h2>
+    <ol class="mt-2 mb-2">
+        <li>Choose your excel file</li>
+        <li>Enter the amount of rows you want in each generated workbook (i.e. 500)</li>
+        <li>Enter the name of the new workbooks you are generating. Each workbook will have the name and number (For example, the name is Interos and 5 workbooks get generated. The names will be Interos1.xlsx, Interos2.xlsx, Interos3.xlsx etc.)</li>
+        <li>Click split, a zip file (with the name you chose) with all of the workbooks will be downloaded to Downloads (or wherever your default downloads location is)</li>
+    </ol>
     <form action="/" method="POST" enctype="multipart/form-data">
-        <label>Select Excel file:</label><br>
-        <input type="file" name="file" accept=".xlsx, .xls"><br><br>
+        <label class="form-label">Select Excel file:</label><br>
+        <input class="form-control" type="file" name="file" accept=".xlsx, .xls"><br><br>
 
-        <label>Rows per Workbook:</label><br>
-        <input type="number" name="rows" min="1"><br><br>
+        <label class="form-label">Rows per Workbook:</label><br>
+        <input class="form-control" type="number" name="rows" min="1"><br><br>
 
-        <label>Workbook Name:</label><br>
-        <input type="text" name="sheet_name"><br><br>
+        <label class="form-label">Workbook Name:</label><br>
+        <input class="form-control" type="text" name="sheet_name"><br><br>
 
-        <input type="submit" value="Split">
+        <input class="form-control submit-form" type="submit" value="Split">
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

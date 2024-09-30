@@ -61,9 +61,22 @@ def extractor():
 
         # Extract from excel sheet
         df = pd.read_excel(file_path)
-        if col_value:
+        if col_value != "0":
             # Filter rows where the column matches the given value
             extracted_df = df[df[col_name] == col_value]
+        elif col_value == "0":
+            # Filter and make workbooks for all unique values in column
+            # Extract rows for each unique value in the column and save to separate workbooks
+            unique_values = df[col_name].dropna().unique()
+            zip_filename = os.path.join(OUTPUT_FOLDER, f"{col_name}_extracted.zip")
+
+            with zipfile.ZipFile(zip_filename, 'w') as zipf:
+                for value in unique_values:
+                    filtered_df = df[df[col_name] == value]
+                    output_path = os.path.join(OUTPUT_FOLDER, f'{col_name}_{value}.xlsx')
+                    filtered_df.to_excel(output_path, index=False, header=True, engine='openpyxl')
+                    zipf.write(output_path, os.path.basename(output_path))
+            return send_file(zip_filename, as_attachment=True)
         else:
             # Filter rows where the column is blank
             extracted_df = df[df[col_name].isna()]

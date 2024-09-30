@@ -13,7 +13,7 @@
     <ol class="mt-2 mb-2">
         <li>Choose your excel file</li>
         <li>Enter the column name of the value you will be filtering by</li>
-        <li>Enter the value</li>
+        <li>If you only want one workbook generated for one value, enter the value. If you want workbooks generated for each unique value in the column, enter 0.</li>
         <li>Enter the name of the new workbook you are generating</li>
         <li>Click extract, the file will be downloaded to Downloads (or wherever your default downloads location is)</li>
     </ol>
@@ -22,14 +22,14 @@
         <label class="form-label">Select Excel file:</label><br>
         <input class="form-control" type="file" name="file" accept=".xlsx, .xls"><br><br>
 
-        <label class="form-label">Enter column name:</label><br>
-        <input type="text" name="col_name"><br><br>
+        <label class="form-label">Enter column name: <span style="color: red">*</span></label><br>
+        <input class="form-control" type="text" name="col_name" required><br><br>
 
-        <label class="form-label">Enter column value:</label><br>
+        <label class="form-label"><b>Enter column value</b> (Entering 0 will extract all unique values to multiple workbooks):</label><br>
         <input class="form-control" type="text" name="col_value"><br><br>
 
-        <label>Enter extracted workbook name:</label><br>
-        <input class="form-control" type="text" name="ext_workbook_name"><br><br>
+        <label>Enter extracted workbook name: <span style="color: red">*</span></label><br>
+        <input class="form-control" type="text" name="ext_workbook_name" required><br><br>
 
         <input class="form-control submit-form" type="submit" value="Extract">
     </form>

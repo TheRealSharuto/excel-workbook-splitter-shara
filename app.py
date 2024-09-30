@@ -89,5 +89,50 @@ def extractor():
     
     return render_template('excel-data-extractor.html')
 
+@app.route('/excel-column-puller', methods=["GET", "POST"])
+def excel_column_puller():
+    if request.method == "POST":
+        files = request.files.getlist("files")
+        col_name = request.form["col_name"]
+        new_col_name = request.form["new_col_name"]
+
+        # Create a zip file to store all the new workbooks
+        zip_filename = os.path.join(OUTPUT_FOLDER, f"{col_name}_extracted.zip")
+
+        with zipfile.ZipFile(zip_filename, 'w') as zipf:
+            # Process each uploaded file
+            for file in files:
+                file_path = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
+                file.save(file_path)
+
+                # Read the Excel file and extract the specified column
+                df = pd.read_excel(file_path)
+                if col_name in df.columns:
+                    if new_col_name:
+                        extracted_df = df[[col_name]].rename(columns={col_name: new_col_name})
+                    else:
+                        extracted_df = df[[col_name]]
+
+                    # Create a new workbook name based on the column name and original workbook name
+                    original_path_name = secure_filename(file.filename)
+                    original_filename = os.path.splitext(original_path_name)
+                    original_filename[0].replace('.xlsx', '')
+                    print(f"Original filename without extension: {original_filename[0]}")  # Debugging line
+                    new_workbook_name = f"{new_col_name}-{original_filename[0]}.xlsx"
+                    new_workbook_name = new_workbook_name.strip(",.')")
+                    output_path = os.path.join(OUTPUT_FOLDER, new_workbook_name)
+
+                    # Save the extracted column to a new workbook
+                    extracted_df.to_excel(output_path, index=False, engine='openpyxl')
+
+                    # Add the new workbook to the zip file
+                    zipf.write(output_path, os.path.basename(output_path))
+                else:
+                    return f"Column '{col_name}' not found in file '{file.filename}'", 400
+
+        return send_file(zip_filename, as_attachment=True)
+    
+    return render_template('excel-column-puller.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

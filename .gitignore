@@ -11,6 +11,7 @@ instance/
 .venv/
 .env
 *.env
+venv/
 
 # Uploads and Output files (optional)
 uploads/
@@ -39,3 +40,4 @@ htmlcov/
 build/
 dist/
 *.egg-info/
+.vercel

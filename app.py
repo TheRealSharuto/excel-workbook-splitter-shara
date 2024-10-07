@@ -26,15 +26,14 @@ def home():
         file_path = os.path.join(UPLOAD_FOLDER, secure_filename(excel_file.filename))
         excel_file.save(file_path)
 
-        # Split the Excel sheet
-        df = pd.read_excel(file_path)
-        sheets = [df[i:i + rows_per_sheet] for i in range(0, df.shape[0], rows_per_sheet)]
+        # Split the Excel sheet in chunks
+        chunk_iter = pd.read_excel(file_path, chunksize=rows_per_sheet)
         zip_filename = os.path.join(OUTPUT_FOLDER, f"{sheet_name}.zip")
 
         with zipfile.ZipFile(zip_filename, 'w') as zipf:
-            for i, sheet in enumerate(sheets):
+            for i, chunk in enumerate(chunk_iter):
                 output_path = os.path.join(OUTPUT_FOLDER, f'{sheet_name}{i+1}.xlsx')
-                sheet.to_excel(output_path, index=False, header=True)
+                chunk.to_excel(output_path, index=False, header=True)
                 zipf.write(output_path, os.path.basename(output_path))
 
         return send_file(zip_filename, as_attachment=True)

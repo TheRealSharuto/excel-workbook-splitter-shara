@@ -28,7 +28,8 @@ def home():
 
         # Read the Excel file
         df = pd.read_excel(file_path)
-        total_rows = df.shape
+        total_rows = df.shape[0]  # Fix total_rows calculation
+
         zip_filename = os.path.join(OUTPUT_FOLDER, f"{sheet_name}.zip")
 
         with zipfile.ZipFile(zip_filename, 'w') as zipf:
@@ -36,7 +37,7 @@ def home():
                 end_row = min(start_row + rows_per_sheet, total_rows)
                 chunk = df.iloc[start_row:end_row]
                 output_path = os.path.join(OUTPUT_FOLDER, f'{sheet_name}{start_row // rows_per_sheet + 1}.xlsx')
-                chunk.to_excel(output_path, index=False, header=True)
+                chunk.to_excel(output_path, index=False, header=True, engine='openpyxl')
                 zipf.write(output_path, os.path.basename(output_path))
 
         return send_file(zip_filename, as_attachment=True)
